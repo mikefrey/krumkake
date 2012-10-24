@@ -24,11 +24,11 @@ function Krumkake (req, res, opt) {
   // set up the cookies module
   this.cookies = opt.cookies || new Cookies(req, res, this.keys)
 
-  this.name = opt && opt.cookieName || 's'
+  this.cookieName = opt && opt.cookieName || 's'
   this.cookieOpts = { signed: !!this.keys }
 
   // Default to 2 hour sessions
-  this.expire = opt.expire || 1000 * 60 * 60 * 2
+  this.expire = opt.expire != null ? opt.expire : 1000 * 60 * 60 * 2
 }
 
 Krumkake.prototype.del = function (key) {
@@ -37,10 +37,13 @@ Krumkake.prototype.del = function (key) {
 }
 
 Krumkake.prototype.delAll = function (cb) {
+  this.data = {}
   this.cookies.set(this.cookieName)
 }
 
 Krumkake.prototype.set = function (key, val) {
+  var data = this.data || (this.data = {})
+
   var kv = {}
 
   if (val)
@@ -49,21 +52,21 @@ Krumkake.prototype.set = function (key, val) {
     kv = key
 
   Object.keys(kv).forEach(function(k) {
-    this.data[k] = obj[key]
+    data[k] = kv[k]
   })
 
   this._write()
 }
 
 Krumkake.prototype.get = function (key) {
-  return this.data[key]
+  return this._read()[key]
 }
 
 Krumkake.prototype.getAll = function () {
-  return this.data
+  return this._read()
 }
 
-krumkake.prototype._read = function() {
+Krumkake.prototype._read = function() {
   if (!this.data) {
     // get existing data
     var data = this.cookies.get(this.cookieName, this.cookieOpts)
@@ -74,8 +77,8 @@ krumkake.prototype._read = function() {
   return this.data
 }
 
-krumkake.prototype._write = function() {
+Krumkake.prototype._write = function() {
   var opts = this.cookieOpts
-  opts.expires = new Date((+new Date) + this.expires)
-  this.cookies.set(this.cookiteName, JSON.stringify(this.data), opts)
+  opts.expires = new Date((+new Date) + this.expire)
+  this.cookies.set(this.cookieName, JSON.stringify(this.data), opts)
 }
