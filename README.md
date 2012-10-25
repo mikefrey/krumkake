@@ -14,7 +14,7 @@ var Krumkake = require('krumkake'),
 var http = require('http')
 
 http.createServer(function(req, res) {
-  var session = new Krumkake({
+  var session = new Krumkake(req, res, {
     cookieName: 's', // defaults to 's'
     expire: 60 * 60 * 2, // time in seconds, default 2 hours
     keys: ['secret','keys']
@@ -36,7 +36,7 @@ http.createServer(function(req, res) {
 
 ## API
 
-### Constructor
+### session = new Krumkake(req, res, [options])
 
 * `cookieName` {String} Name to use for the cookie
 * `expire` {Number} Time in seconds until the session expires (default 2 hours)
