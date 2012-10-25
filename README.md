@@ -38,6 +38,9 @@ http.createServer(function(req, res) {
 
 ### session = new Krumkake(req, res, [options])
 
+Initialize a new instance with the server request and response objects, and an
+optional `options` object. `options` accepts the following properties:
+
 * `cookieName` {String} Name to use for the cookie
 * `expire` {Number} Time in seconds until the session expires (default 2 hours)
 * `keys` {[Keygrip](https://github.com/jed/keygrip)} A Keygrip instance used to
