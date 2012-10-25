@@ -28,10 +28,11 @@ function Krumkake (req, res, opt) {
   this.cookieOpts = { signed: !!this.keys }
 
   // Default to 2 hour sessions
-  this.expire = opt.expire != null ? opt.expire : 1000 * 60 * 60 * 2
+  this.expire = opt.expire != null ? opt.expire : 60 * 60 * 2
 }
 
 Krumkake.prototype.del = function (key) {
+  if (!key) return this.delAll()
   delete this.data[key]
   this._write()
 }
@@ -79,6 +80,6 @@ Krumkake.prototype._read = function() {
 
 Krumkake.prototype._write = function() {
   var opts = this.cookieOpts
-  opts.expires = new Date((+new Date) + this.expire)
+  opts.expires = new Date((+new Date) + (this.expire*1000))
   this.cookies.set(this.cookieName, JSON.stringify(this.data), opts)
 }

@@ -41,7 +41,7 @@ describe('Session', function() {
 
     it('should set default expiration', function(done) {
       var krumkake = new Krumkake(null, null, { cookies:cookies })
-      assert.equal(krumkake.expire, 1000*60*60*2)
+      assert.equal(krumkake.expire, 60*60*2)
       done()
     })
 
@@ -160,6 +160,13 @@ describe('Session', function() {
       krumkake.del('one')
       val = krumkake.get('one')
       assert(!val)
+      done()
+    })
+
+    it('should delete all when key is omitted', function(done) {
+      krumkake.delAll = sinon.spy()
+      krumkake.del()
+      assert(krumkake.delAll.calledOnce)
       done()
     })
 
