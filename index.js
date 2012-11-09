@@ -43,7 +43,7 @@ Krumkake.prototype.delAll = function (cb) {
 }
 
 Krumkake.prototype.set = function (key, val) {
-  var data = this.data || (this.data = {})
+  var data = this.getAll()
 
   var kv = {}
 
