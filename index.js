@@ -25,7 +25,13 @@ function Krumkake (req, res, opt) {
   this.cookies = opt.cookies || new Cookies(req, res, this.keys)
 
   this.cookieName = opt && opt.cookieName || 's'
-  this.cookieOpts = { signed: !!this.keys }
+  this.getOpts = { signed: !!this.keys }
+  this.setOpts = {
+    domain: opt.domain,
+    httpOnly: true,
+    signed: !!this.keys,
+    overwrite: true
+  }
 
   // Default to 2 hour sessions
   this.expire = opt.expire != null ? opt.expire : 60 * 60 * 2
@@ -70,7 +76,7 @@ Krumkake.prototype.getAll = function () {
 Krumkake.prototype._read = function() {
   if (!this.data) {
     // get existing data
-    var data = this.cookies.get(this.cookieName, this.cookieOpts)
+    var data = this.cookies.get(this.cookieName, this.getOpts)
     this.data = data && JSON.parse(data) || {}
     // write the cookie again to set the expires header
     this._write()
@@ -79,7 +85,7 @@ Krumkake.prototype._read = function() {
 }
 
 Krumkake.prototype._write = function() {
-  var opts = this.cookieOpts
+  var opts = this.setOpts
   opts.expires = new Date((+new Date) + (this.expire*1000))
   this.cookies.set(this.cookieName, JSON.stringify(this.data), opts)
 }

@@ -29,13 +29,15 @@ describe('Session', function() {
 
     it('should set options as not signed', function(done) {
       var krumkake = new Krumkake(null, null, { cookies:cookies })
-      assert.equal(krumkake.cookieOpts.signed, false)
+      assert.equal(krumkake.getOpts.signed, false)
+      assert.equal(krumkake.setOpts.signed, false)
       done()
     })
 
     it('should set options as signed', function(done) {
       var krumkake = new Krumkake(null, null, { cookies:cookies, keys:['a','b'] })
-      assert.equal(krumkake.cookieOpts.signed, true)
+      assert.equal(krumkake.getOpts.signed, true)
+      assert.equal(krumkake.setOpts.signed, true)
       done()
     })
 
@@ -51,13 +53,19 @@ describe('Session', function() {
       done()
     })
 
+    it('should set custom domain', function(done) {
+      var krumkake = new Krumkake(null, null, { cookies:cookies, domain:'.example.com' })
+      assert.equal(krumkake.setOpts.domain, '.example.com')
+      done()
+    })
+
   })
 
   describe('Set', function() {
     var krumkake
 
     beforeEach(function(done) {
-      krumkake = new Krumkake(null, null, { cookies:cookies })
+      krumkake = new Krumkake(null, null, { cookies:cookies, domain:'.example.com' })
       done()
     })
 
@@ -83,6 +91,13 @@ describe('Session', function() {
       krumkake.set(key, val)
       assert.strictEqual(krumkake.data[key], val)
       assert(cookies.set.calledWith('s', '{"foo":{"bar":"baz"}}'))
+      done()
+    })
+
+    it('should set with custom domain', function(done) {
+      krumkake.set('foo', { bar:'baz' })
+      var call = cookies.set.getCall(0)
+      assert.strictEqual(call.args[2].domain, '.example.com')
       done()
     })
 
