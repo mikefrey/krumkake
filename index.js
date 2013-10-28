@@ -45,7 +45,7 @@ Krumkake.prototype.del = function (key) {
 
 Krumkake.prototype.delAll = function (cb) {
   this.data = {}
-  this.cookies.set(this.cookieName)
+  this.cookies.set(this.cookieName, '', this.setOpts)
 }
 
 Krumkake.prototype.set = function (key, val) {
