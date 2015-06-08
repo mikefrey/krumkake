@@ -87,6 +87,7 @@ Krumkake.prototype._read = function() {
 Krumkake.prototype._write = function() {
   var opts = this.setOpts
   opts.expires = new Date((+new Date) + (this.expire*1000))
-  var data = this.data && encodeURIComponent(JSON.stringify(this.data))
+  var data = JSON.stringify(this.data)
+  data = data && encodeURIComponent(data)
   this.cookies.set(this.cookieName, data, opts)
 }
