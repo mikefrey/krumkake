@@ -212,7 +212,7 @@ describe('Session', function() {
       val = krumkake.get('two')
       assert(!val)
 
-      assert(cookies.set.calledWithExactly('s'))
+      assert(cookies.set.calledWithExactly('s', '', krumkake.setOpts))
 
       done()
     })
