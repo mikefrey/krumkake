@@ -73,7 +73,7 @@ describe('Session', function() {
       krumkake.set('foo', 'bar')
       assert.equal(krumkake.data['foo'], 'bar')
       // console.log(cookies.set.getCall(0).args)
-      assert(cookies.set.calledWith('s', '{"foo":"bar"}'))
+      assert(cookies.set.calledWith('s', encodeURIComponent('{"foo":"bar"}')))
       done()
     })
 
@@ -81,7 +81,7 @@ describe('Session', function() {
       krumkake.set({'foo':'bar', 'baz':'foo'})
       assert.equal(krumkake.data['foo'], 'bar')
       assert.equal(krumkake.data['baz'], 'foo')
-      assert(cookies.set.calledWith('s', '{"foo":"bar","baz":"foo"}'))
+      assert(cookies.set.calledWith('s', encodeURIComponent('{"foo":"bar","baz":"foo"}')))
       done()
     })
 
@@ -90,7 +90,7 @@ describe('Session', function() {
       var val = { bar:'baz' }
       krumkake.set(key, val)
       assert.strictEqual(krumkake.data[key], val)
-      assert(cookies.set.calledWith('s', '{"foo":{"bar":"baz"}}'))
+      assert(cookies.set.calledWith('s', encodeURIComponent('{"foo":{"bar":"baz"}}')))
       done()
     })
 
@@ -212,7 +212,7 @@ describe('Session', function() {
       val = krumkake.get('two')
       assert(!val)
 
-      assert(cookies.set.calledWithExactly('s'))
+      assert(cookies.set.calledWithExactly('s', '', krumkake.setOpts))
 
       done()
     })
