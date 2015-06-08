@@ -77,7 +77,7 @@ Krumkake.prototype._read = function() {
   if (!this.data) {
     // get existing data
     var data = this.cookies.get(this.cookieName, this.getOpts)
-    this.data = data && JSON.parse(data) || {}
+    this.data = data && JSON.parse(decodeURIComponent(data)) || {}
     // write the cookie again to set the expires header
     this._write()
   }
@@ -87,5 +87,6 @@ Krumkake.prototype._read = function() {
 Krumkake.prototype._write = function() {
   var opts = this.setOpts
   opts.expires = new Date((+new Date) + (this.expire*1000))
-  this.cookies.set(this.cookieName, JSON.stringify(this.data), opts)
+  var data = this.data && encodeURIComponent(JSON.stringify(this.data))
+  this.cookies.set(this.cookieName, data, opts)
 }
